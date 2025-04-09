@@ -1,0 +1,22 @@
+// 版本
+syntax = "proto3";
+
+// 导入的包路径
+option go_package = "code.ysh.homework.com/miniServer/add_clent/proto";
+// 包名
+package pb;
+
+// 定义服务
+service Gretter {
+    rpc Add (AddResquest) returns (AddResponse) {}
+}
+
+// 消息请求
+message AddResquest {
+    int64 x = 1;
+    int64 y = 2;
+}
+
+message AddResponse {
+    int64 reply = 1;
+}

@@ -1,0 +1,21 @@
+// 版本声明
+syntax = "proto3";
+// 导入包的路径
+option go_package = "code.ysh.com/miniserver/helo_client/proto";
+// 包名
+package pb;
+
+ // 定义服务
+ service Greeter {
+    // sayHello 方法
+    rpc SayHello (HelloRequest) returns (HelloResponse) {}
+}
+
+ // 消息请求
+ message HelloRequest {
+    string name = 1;
+ }
+
+ message HelloResponse {
+    string reply = 1;
+ }

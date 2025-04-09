@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package book;
+
+option go_package = "demo/proto/book";
+
+import "book/price.proto";
+import "author/author.proto";
+import "google/protobuf/timestamp.proto";
+
+message Book {
+    string title = 1;
+    Price price = 2;
+
+    author.Info authorInfo = 3;
+
+    google.protobuf.Timestamp data=4;
+}
+
+service BookService{
+    rpc Create(Book)returns(Book);
+}

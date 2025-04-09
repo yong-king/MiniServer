@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "oneof.demo/api";
+
+
+// import "google/protobuf/wrappers.proto";
+import "google/protobuf/field_mask.proto";
+
+message NoticeReaderRequest{
+    string msg = 1;
+    oneof notice_way{
+        string email = 2;
+        string phone = 3;
+    }
+}
+
+message Book {
+    string titile = 1;
+    string author = 2;
+
+    // google.protobuf.Int64Value price = 3;
+    optional int64 price = 3;
+    message Info {
+        int64 a = 1;
+        int64 b = 2;
+    }
+    Info info = 4;
+}
+
+message UpdateBookRequest {
+    // 操作人
+    string opt = 1;
+    // 要更新的信息
+    Book book = 2;
+    // 要更新的字段
+    google.protobuf.FieldMask update_mask = 3;
+
+}
