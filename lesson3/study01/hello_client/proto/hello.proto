@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "hello_client/demo/proto";
+
+// 定义服务
+service Gretter {
+    rpc SayHello (HelloRequest) returns (HelloResponse) {}
+    rpc LotsOfReplines(HelloRequest) returns (stream HelloResponse) {}
+    rpc LotsOfGreetings(stream HelloRequest) returns (HelloResponse) {}
+    rpc BidiHello(stream HelloRequest) returns (stream HelloResponse) {}
+}
+
+// 消息请求
+message HelloRequest {
+    string name = 1;
+}
+
+message HelloResponse {
+    string reply = 1;
+}
