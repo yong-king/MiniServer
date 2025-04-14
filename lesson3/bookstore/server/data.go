@@ -98,14 +98,14 @@ func (b *bookstore) CreateBook(ctx context.Context, data Book) (*Book, error) {
 }
 
 // ListBooks 根据书架id获取书架书籍列表
-func (b *bookstore) ListBooks(ctx context.Context, sid int64) ([]*Book, error) {
+func (b *bookstore) ListBooks(ctx context.Context, sid int64, NextId string, PageSize int) ([]*Book, error) {
 	// 检查参数
 	if sid <= 0 {
 		return nil, errors.New("invalid shelf id")
 	}
 	// 查询书架书籍
 	var bl []*Book
-	err := b.db.WithContext(ctx).Where("shelf_id = ?", sid).Find(&bl).Error
+	err := b.db.WithContext(ctx).Where("shelf_id = ? and id > ?", sid, NextId).Limit(PageSize).Order("id desc").Find(&bl).Error
 	return bl, err
 }
 

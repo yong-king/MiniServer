@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"strconv"
+	"time"
 
 	"com.ysh.blog.booksotre/pb"
 	"google.golang.org/grpc/codes"
@@ -15,6 +17,10 @@ type server struct{
 
 	bs *bookstore
 }
+const (
+	defaultNextId = "0"
+	defaultPageSize = 2
+)
 
 // ListShelves 获取书记列表
 func (s *server) ListShelves(ctx context.Context, in *emptypb.Empty) (*pb.ListShelvesResponse, error) {
@@ -106,29 +112,66 @@ func (s *server)CreateBook(ctx context.Context, in *pb.CreateBookRequest) (*pb.B
 	return &pb.Book{Id: b.ID, Title: b.Title, Author: b.Author}, nil
 }
 
+func Invalid(p Page) bool{
+	return p.NextID == ""|| p.NextTimeAtUTC == 0 || p.NextTimeAtUTC > time.Now().Unix() || p.PageSize <= 0
+}
+
 // ListBooks 根据指定书架获取书籍
 func(s *server) ListBooks(ctx context.Context, in *pb.ListBooksRequest) (*pb.ListBooksResponse, error) {
 	// 检查参数
 	if in.GetShelf() <= 0 {
 		return nil, status.Error(codes.InvalidArgument, "invalid shelf id")
 	}
+	var(
+		cursor = defaultNextId
+		pageSize = defaultPageSize	
+	)
+	if len(in.GetPageToken()) > 0 {
+		// 解码
+		p := Token(in.PageToken).Decode()
+		// 参数校验
+		if Invalid(p){
+			return nil, status.Error(codes.InvalidArgument, "invalid page token") 
+		}
+		cursor = p.NextID
+		pageSize = int(p.PageSize)
+	}
 	// 查询书籍列表
-	bl, err := s.bs.ListBooks(ctx, in.GetShelf())
+	bl, err := s.bs.ListBooks(ctx, in.GetShelf(), cursor, pageSize+1)
 	if err == gorm.ErrEmptySlice{
 		return &pb.ListBooksResponse{}, nil
 	}
 	if err != nil {
 		return nil, status.Error(codes.Internal, "query failed")
 	}
+	var (
+		hasNextPageToken bool
+		realSize int = len(bl)
+		nextPageToken string
+	)
+	if len(bl) > pageSize {
+		hasNextPageToken = true
+		realSize = pageSize
+	}
 	// 封装返回
 	nbl := make([]*pb.Book, 0, len(bl))
-	for _, b := range bl{
-		nbl = append(nbl, &pb.Book{
-			Author: b.Author,
-			Title: b.Title,
+	for i := range(realSize){
+			nbl = append(nbl, &pb.Book{
+			Id: bl[i].ID,
+			Author: bl[i].Author,
+			Title: bl[i].Title,
 		})
 	}
-	return &pb.ListBooksResponse{Books: nbl}, nil
+	// 如果有下一页
+	if hasNextPageToken{
+		nextPage := Page{
+			NextID: strconv.FormatInt(int64(nbl[realSize-1].Id), 10),
+			NextTimeAtUTC: time.Now().Unix(),
+			PageSize: int64(realSize),
+		}
+		nextPageToken = string(nextPage.Encode())
+	}
+	return &pb.ListBooksResponse{Books: nbl, NextPageToken: nextPageToken}, nil
 }
 
 // GetBook 获取指定书籍

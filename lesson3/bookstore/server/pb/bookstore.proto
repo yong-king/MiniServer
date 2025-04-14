@@ -116,11 +116,13 @@ message DeleteShelfRequest {
 message ListBooksRequest {
     // 索引书架id
     int64 shelf = 1;
+    string page_token = 2;
 }
 
 message ListBooksResponse {
     // 书架上的书
     repeated Book books = 1;
+    string next_page_token = 2;
 }
 
 message CreateBookRequest {

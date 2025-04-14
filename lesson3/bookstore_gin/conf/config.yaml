@@ -1,0 +1,22 @@
+name: "bookstore"
+version: "v 0.0.1"
+mode: "debug"
+port: 8080
+
+log:
+  filename: "bookstore.log"
+  max_size: 200
+  max_age: 30
+  max_backups: 5
+  level: "debug"
+
+mysql:
+  host: "127.0.0.1"
+  port: 3306
+  user: "root"
+  password: "youngking98"
+  dbname: "bookstore"
+  max_open_coons: 200
+  max_idle_coons: 10
+
+
