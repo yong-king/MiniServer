@@ -17,6 +17,7 @@ type server struct{
 
 	bs *bookstore
 }
+
 const (
 	defaultNextId = "0"
 	defaultPageSize = 2
