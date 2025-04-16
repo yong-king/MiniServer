@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package pg;
+
+option go_package = "com.ysh.kit/demo/pb";
+
+service Add {
+    rpc Sum(SumRequest) returns (SumResponse) {}
+    rpc Concat(ConcatREquest) returns (ConcatResponse) {}
+}
+
+message SumRequest{
+    int64 a = 1;
+    int64 b = 2;
+}
+
+message SumResponse{
+    int64 v = 1;
+    string err = 2;
+}
+
+message ConcatREquest{
+    string a = 1;
+    string b = 2;
+}
+
+message ConcatResponse{
+    string v = 1;
+    string err = 2;
+}
