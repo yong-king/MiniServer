@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"go.uber.org/zap"
 	"net/http"
+
+	_ "github.com/mbobakov/grpc-consul-resolver"
 )
 
 func main() {
