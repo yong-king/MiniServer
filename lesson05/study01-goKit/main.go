@@ -129,6 +129,23 @@ type grpcServer struct{
 	concat grpctransport.Handler
 }
 
+func (s *grpcServer) Sum(ctx context.Context, req *pb.SumRequest) (*pb.SumResponse, error) {
+	_, rep, err := s.sum.ServeGRPC(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return rep.(*pb.SumResponse), nil
+}
+
+func  (s *grpcServer) Concat(ctx context.Context, req *pb.ConcatREquest) (*pb.ConcatResponse, error) {
+	_, rep, err := s.concat.ServeGRPC(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return rep.(*pb.ConcatResponse), nil
+}
+
+
 // grpctransport.Handler 接口实现了 --》 ServeGRPC --> 是Server结构体的方法 --> 由NewServer返回
 // func (s Server) ServeGRPC(ctx context.Context, req interface{}) (retctx context.Context, resp interface{}, err error)
 // func NewServer(...) *Server 
@@ -143,12 +160,12 @@ func decodeGRPCConcatRequest(_ context.Context, grpcReq interface{}) (interface{
 }
 
 func encodeGRPCSumResponse(_ context.Context, response interface{}) (interface{}, error){
-	resp := response.(*SumResponse)
+	resp := response.(SumResponse)
 	return &pb.SumResponse{V: int64(resp.V), Err: resp.Err}, nil
 }
 
 func encodeGRPCConcatResponse(_ context.Context, response interface{}) (interface{}, error){
-	resp := response.(*ConcatResponse)
+	resp := response.(ConcatResponse)
 	return &pb.ConcatResponse{V: resp.V, Err: resp.Err}, nil
 }
 
@@ -167,21 +184,6 @@ func NewGRPCServer(svc AddService) pb.AddServer {
 	}
 }
 
-func (s *grpcServer) Sum(ctx context.Context, req *pb.SumRequest) (*pb.SumResponse, error) {
-	_, rep, err := s.sum.ServeGRPC(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return rep.(*pb.SumResponse), nil
-}
-
-func  (s *grpcServer) Concat(ctx context.Context, req *pb.ConcatREquest) (*pb.ConcatResponse, error) {
-	_, rep, err := s.sum.ServeGRPC(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return rep.(*pb.ConcatResponse), nil
-}
 
 func main() {
 	svc := addService{}
