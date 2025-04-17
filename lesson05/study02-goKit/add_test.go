@@ -11,6 +11,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/test/bufconn"
+	"com.ysh.kit/demo/transport"
+	"com.ysh.kit/demo/service"
 )
 
 // 使用bufconn构建测试链接，避免使用实际端口号启动服务
@@ -22,7 +24,7 @@ var bufListener *bufconn.Listener
 func init() {
 	bufListener = bufconn.Listen(bufSize)
 	s := grpc.NewServer()
-	gs := NewGRPCServer(addService{})
+	gs := transport.NewGRPCServer(service.NewService())
 	pb.RegisterAddServer(s, gs)
 	go func() {
 		if err := s.Serve(bufListener); err != nil {
@@ -77,4 +79,5 @@ func TestConcat(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotEmpty(t, resq)
 	assert.Equal(t, resq.V, "102")
+
 }

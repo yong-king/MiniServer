@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "com.ysh/trim/demo/pb";
+
+service Trim {
+    rpc TrimSpace (TrimRequest) returns (TrimResponse) {}
+}
+
+message TrimRequest{
+    string s = 1;
+}
+
+message TrimResponse{
+    string s = 1; 
+}
