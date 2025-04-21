@@ -1,0 +1,28 @@
+{"@timestamp":"2025-04-19T16:31:23.708+08:00","caller":"stat/usage.go:61","content":"CPU: 0m, MEMORY: Alloc=1.0Mi, TotalAlloc=1.0Mi, Sys=11.9Mi, NumGC=0","level":"stat"}
+{"@timestamp":"2025-04-19T16:31:23.708+08:00","caller":"cache/cachestat.go:71","content":"dbcache(sqlc) - qpm: 1, hit_ratio: 0.0%, hit: 0, miss: 1, db_fails: 0","level":"stat"}
+{"@timestamp":"2025-04-19T16:31:23.708+08:00","caller":"load/sheddingstat.go:61","content":"(api) shedding_stat [1m], cpu: 0, total: 1, pass: 1, drop: 0","level":"stat"}
+{"@timestamp":"2025-04-19T16:31:41.312+08:00","caller":"stat/metrics.go:210","content":"(user-api) - qps: 0.0/s, drops: 0, avg time: 40.0ms, med: 40.8ms, 90th: 40.8ms, 99th: 40.8ms, 99.9th: 40.8ms","level":"stat"}
+{"@timestamp":"2025-04-19T16:31:43.240+08:00","caller":"stat/metrics.go:210","content":"(user-api) - qps: 0.0/s, drops: 0, avg time: 0.0ms, med: 0.0ms, 90th: 0.0ms, 99th: 0.0ms, 99.9th: 0.0ms","level":"stat"}
+2025-04-20T11:12:26.397+08:00	[32;1m stat [0;22m	CPU: 0m, MEMORY: Alloc=0.8Mi, TotalAlloc=0.8Mi, Sys=8.5Mi, NumGC=0	caller=stat/usage.go:61
+2025-04-20T11:12:26.397+08:00	[32;1m stat [0;22m	(api) shedding_stat [1m], cpu: 0, total: 0, pass: 0, drop: 0	caller=load/sheddingstat.go:61
+2025-04-20T11:13:26.386+08:00	[32;1m stat [0;22m	CPU: 0m, MEMORY: Alloc=1.0Mi, TotalAlloc=1.0Mi, Sys=13.3Mi, NumGC=0	caller=stat/usage.go:61
+2025-04-20T11:13:26.387+08:00	[32;1m stat [0;22m	dbcache(sqlc) - qpm: 1, hit_ratio: 0.0%, hit: 0, miss: 1, db_fails: 0	caller=cache/cachestat.go:71
+2025-04-20T11:13:26.387+08:00	[32;1m stat [0;22m	(api) shedding_stat [1m], cpu: 0, total: 1, pass: 1, drop: 0	caller=load/sheddingstat.go:61
+2025-04-20T11:13:47.832+08:00	[32;1m stat [0;22m	(user-api) - qps: 0.0/s, drops: 0, avg time: 101.0ms, med: 177.1ms, 90th: 177.1ms, 99th: 177.1ms, 99.9th: 177.1ms	caller=stat/metrics.go:210
+2025-04-20T11:14:26.384+08:00	[32;1m stat [0;22m	CPU: 0m, MEMORY: Alloc=1.1Mi, TotalAlloc=1.1Mi, Sys=13.3Mi, NumGC=0	caller=stat/usage.go:61
+2025-04-20T11:14:26.385+08:00	[32;1m stat [0;22m	dbcache(sqlc) - qpm: 1, hit_ratio: 0.0%, hit: 0, miss: 1, db_fails: 0	caller=cache/cachestat.go:71
+2025-04-20T11:14:26.386+08:00	[32;1m stat [0;22m	(api) shedding_stat [1m], cpu: 0, total: 1, pass: 1, drop: 0	caller=load/sheddingstat.go:61
+2025-04-20T11:14:47.829+08:00	[32;1m stat [0;22m	(user-api) - qps: 0.0/s, drops: 0, avg time: 0.0ms, med: 0.0ms, 90th: 0.0ms, 99th: 0.0ms, 99.9th: 0.0ms	caller=stat/metrics.go:210
+2025-04-20T11:15:26.383+08:00	[32;1m stat [0;22m	CPU: 0m, MEMORY: Alloc=1.2Mi, TotalAlloc=1.2Mi, Sys=13.3Mi, NumGC=0	caller=stat/usage.go:61
+2025-04-20T11:15:26.383+08:00	[32;1m stat [0;22m	dbcache(sqlc) - qpm: 4, hit_ratio: 75.0%, hit: 3, miss: 1, db_fails: 0	caller=cache/cachestat.go:71
+2025-04-20T11:15:26.384+08:00	[32;1m stat [0;22m	(api) shedding_stat [1m], cpu: 0, total: 4, pass: 4, drop: 0	caller=load/sheddingstat.go:61
+2025-04-20T17:06:43.756+08:00	[32;1m stat [0;22m	CPU: 0m, MEMORY: Alloc=1.0Mi, TotalAlloc=1.0Mi, Sys=11.1Mi, NumGC=0	caller=stat/usage.go:61
+2025-04-20T17:06:43.756+08:00	[32;1m stat [0;22m	(api) shedding_stat [1m], cpu: 0, total: 0, pass: 0, drop: 0	caller=load/sheddingstat.go:61
+2025-04-20T17:07:43.754+08:00	[32;1m stat [0;22m	CPU: 0m, MEMORY: Alloc=1.1Mi, TotalAlloc=1.1Mi, Sys=11.4Mi, NumGC=0	caller=stat/usage.go:61
+2025-04-20T17:07:43.754+08:00	[32;1m stat [0;22m	dbcache(sqlc) - qpm: 2, hit_ratio: 100.0%, hit: 2, miss: 0, db_fails: 0	caller=cache/cachestat.go:71
+2025-04-20T17:07:43.754+08:00	[32;1m stat [0;22m	(api) shedding_stat [1m], cpu: 0, total: 1, pass: 1, drop: 0	caller=load/sheddingstat.go:61
+2025-04-20T17:08:18.335+08:00	[32;1m stat [0;22m	(user-api) - qps: 0.1/s, drops: 0, avg time: 19.3ms, med: 49.9ms, 90th: 49.9ms, 99th: 49.9ms, 99.9th: 49.9ms	caller=stat/metrics.go:210
+2025-04-20T17:08:43.753+08:00	[32;1m stat [0;22m	CPU: 0m, MEMORY: Alloc=1.3Mi, TotalAlloc=1.3Mi, Sys=12.8Mi, NumGC=0	caller=stat/usage.go:61
+2025-04-20T17:08:43.753+08:00	[32;1m stat [0;22m	(api) shedding_stat [1m], cpu: 0, total: 5, pass: 5, drop: 0	caller=load/sheddingstat.go:61
+2025-04-20T17:08:43.753+08:00	[32;1m stat [0;22m	dbcache(sqlc) - qpm: 4, hit_ratio: 75.0%, hit: 3, miss: 1, db_fails: 0	caller=cache/cachestat.go:71
+2025-04-20T17:09:18.333+08:00	[32;1m stat [0;22m	(user-api) - qps: 0.2/s, drops: 0, avg time: 3.8ms, med: 1.4ms, 90th: 24.0ms, 99th: 24.0ms, 99.9th: 24.0ms	caller=stat/metrics.go:210

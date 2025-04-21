@@ -40,9 +40,13 @@ func (l *SignupLogic) Signup(req *types.SignupRequest) (resp *types.SingupRespon
 		return nil, errors.New("两次密码不正确!")
 	}
 
+	logx.Debugf("req:%#v\n", req)
+
 	// 2. 注册用户存在
 	u, err := l.svcCtx.UserModel.FindOneByUsername(l.ctx, req.Username)
 	if err != nil && err != sqlx.ErrNotFound{
+		fmt.Printf("err:%#v\n",err)
+		logx.Errorf("user_signup_UserModel.FindOneByUsername failed: %#v\n", err)
 		return nil, errors.New("查询出错!")
 	}
 	if u != nil {
@@ -50,24 +54,36 @@ func (l *SignupLogic) Signup(req *types.SignupRequest) (resp *types.SingupRespon
 	}
 
 	// 3. 密码加密
-	h := md5.New()
-	h.Write([]byte(req.Password))
-	h.Write(secret)
-	passwordS := hex.EncodeToString(h.Sum(nil))
-
+	passwordS := passwordMd5([]byte(req.Password))
+	
 	fmt.Printf("resq: %#v\n", req)
-	resp = &types.SingupResponse{
-		Message: "success",
-	}
+
 	user := &model.User{
 		UserId:   time.Now().Unix(),
 		Username: req.Username,
 		Password: passwordS,
 		Gender:   1,
 	}
+
+	// 插入数据
 	_, err = l.svcCtx.UserModel.Insert(context.Background(), user)
 	if err != nil {
+		logx.Errorw(
+			"user_signup_UserModel.Insert failed",
+			logx.Field("err:", err),
+		)
 		return nil, err
 	}
-	return resp, nil
+
+	return &types.SingupResponse{Message: "success"}, nil
 }
+
+// 密码加密
+func passwordMd5(password []byte) string {
+	h := md5.New()
+	h.Write([]byte(password))
+	h.Write(secret)
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+

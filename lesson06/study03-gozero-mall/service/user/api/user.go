@@ -6,6 +6,7 @@ import (
 
 	"user-api/internal/config"
 	"user-api/internal/handler"
+	"user-api/internal/middleware"
 	"user-api/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
@@ -22,6 +23,8 @@ func main() {
 	// fmt.Printf("-------->copf:%#v\n", c)
 
 	server := rest.MustNewServer(c.RestConf)
+	server.Use(middleware.CopyResq)
+	server.Use(middleware.MiddlewareWithAnotherService(true))
 	defer server.Stop()
 
 	ctx := svc.NewServiceContext(c)

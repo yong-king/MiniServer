@@ -1,0 +1,32 @@
+2025-04-20T11:15:18.165+08:00	[31;1m error [0;22m	authorize failed: no token present in request
+=> GET /v1/user/info HTTP/1.1
+Host: 127.0.0.1:8888
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Postman-Token: 1030241a-b29b-4581-98d4-65eb31258073
+User-Agent: PostmanRuntime/7.43.0
+
+	caller=handler/authhandler.go:103	trace=9d3188bea6ec391385562ec9dccd1e38	span=c74319d2690ab23a
+2025-04-20T17:07:49.812+08:00	[31;1m error [0;22m	authorize failed: token contains an invalid number of segments
+=> GET /v1/user/info HTTP/1.1
+Host: 127.0.0.1:8888
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Authorization: 127.0.0.1:8888/v1/user
+Connection: keep-alive
+Postman-Token: 9287cff8-ab0f-4c2b-a588-6ec75dcb8b85
+User-Agent: PostmanRuntime/7.43.0
+
+	caller=handler/authhandler.go:103	trace=9943e0fa3c0d77d120ca30c7d0a1aa66	span=5db8b7255810965c
+2025-04-20T17:08:22.751+08:00	[31;1m error [0;22m	authorize failed: Token is expired
+=> GET /v1/user/info?user_id=1744985298 HTTP/1.1
+Host: 127.0.0.1:8888
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoIjoieXNoIiwiZXhwIjoxNzQ1MTQwMDk4LCJpYXQiOjE3NDUxNDAwMzgsInVzZXJJZCI6MTc0NDk4NTI5OH0._DEGwUdoZnrENNxxNjfPPjvDtgQ4hoQFI0UZn9IId8I
+Connection: keep-alive
+Postman-Token: e61a592c-690a-40e9-9772-f10f46ea5c02
+User-Agent: PostmanRuntime/7.43.0
+
+	caller=handler/authhandler.go:103	trace=4122f4cc9fccf5edd27902c7eb7953c5	span=a0d20336ffc1d6c9

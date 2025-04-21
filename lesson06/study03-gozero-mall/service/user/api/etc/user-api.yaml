@@ -1,0 +1,23 @@
+Name: user-api
+Host: 0.0.0.0
+Port: 8888
+
+MysqlDB:
+  DbSource: root:youngking98@tcp(127.0.0.1:3307)/db1?parseTime=true
+
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass: youngking98
+
+Log:
+  ServiceName: mall
+  Mode: file
+  Encoding: json
+  Path: logs
+  Level: debug
+  Stat: true
+
+Auth:
+  AccessSecret: dlrb&zrn&ysh
+  AccessExpire: 60
+
