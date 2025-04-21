@@ -2,20 +2,18 @@ package config
 
 import (
 	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"
-	"github.com/zeromicro/zero-contrib/zrpc/registry/consul"
 )
 
 type Config struct {
-	zrpc.RpcServerConf
+	rest.RestConf
 
-	// mysql
 	MysqlDb struct{
 		DbSource string `json:"DbSource"`
 	}
 
-	// redis
 	CacheRedis cache.CacheConf
 
-	Consul consul.Conf
+	UserRPC zrpc.RpcClientConf	// 连接其他微服务的RPC客户端
 }

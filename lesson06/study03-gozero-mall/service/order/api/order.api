@@ -1,0 +1,32 @@
+syntax = "v1"
+
+info (
+	title:   "mall-order"
+	desc:    "go-zero study project"
+	author:  "ysh"
+	email:   "@youngking.com"
+	version: "1.0"
+)
+
+type searchRequest {
+	OrderID string `form:"orderID"`
+}
+
+type searchResponse {
+	OrderID    string `json:"orderID"`
+	Status     int    `json:"status"`
+	Username   string `json:"username"`
+	TradeID    string `json:"tradeID"`
+	PayChannel int    `json:"pay_channel"`
+	PayAmount  int    `json:"pay_amount"`
+	PayTime    int    `json:"pay_time"`
+}
+
+@server (
+	prefix: /v1
+)
+service order-api {
+	@handler SearchHandler
+	get /order/search (searchRequest) returns (searchResponse)
+}
+

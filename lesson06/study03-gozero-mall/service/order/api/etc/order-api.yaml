@@ -1,0 +1,17 @@
+Name: order-api
+Host: 0.0.0.0
+Port: 8889
+
+MysqlDB:
+  DbSource: root:youngking98@tcp(127.0.0.1:3307)/db1?parseTime=true
+
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass: youngking98
+
+UserRPC:
+  Target: consul://127.0.0.1:8500/consul-user.rpc?wait=14s
+  # Etcd:
+  #   Hosts: 
+  #     - 127.0.0.1:2379
+  #   Key: user.rpc
