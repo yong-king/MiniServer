@@ -1,0 +1,37 @@
+syntax = "v1"
+
+info (
+	title:   "shortener"
+	desc:    "shorturl to longurl"
+	author:  "ysh"
+	email:   "youngking98.com"
+	version: "1.0"
+)
+
+type ConvertRequest {
+	LongUrl string `json:"longUrl" validate:"required"`
+}
+
+type ConvertResponse {
+	ShortUrl string `json:"shortUrl"`
+}
+
+type ShowResquest {
+	ShortUrl string `path:"shortUrl" validate:"required"`
+}
+
+type ShowResponse {
+	LongUrl string `json:"longUrl"`
+}
+
+@server (
+	prefix: /v1
+)
+service shortener-api {
+	@handler ConvertHandler
+	post /convert (ConvertRequest) returns (ConvertResponse)
+
+	@handler ShowHandler
+	get /:shortUrl (ShowResquest) returns (ShowResponse)
+}
+

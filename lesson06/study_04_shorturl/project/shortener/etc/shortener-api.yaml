@@ -1,0 +1,23 @@
+Name: shortener-api
+Host: 0.0.0.0
+Port: 8888
+
+ShortUrlMapDb:
+  DSN: root:youngking98@tcp(127.0.0.1:3307)/db1?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+SequenceDB:
+  DSN: root:youngking98@tcp(127.0.0.1:3307)/db1?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass: youngking98
+
+SequenceRDB:
+  Host: 127.0.0.1:6379
+  Pass: youngking98
+
+Base62String: 0zABCDfQpFGHINOPW789abcdeXYJ34Rqr12vwxystuKLMESTUVghijklmno56Z
+
+ShortUrlBlackList: ["fuck", "api", "convert", "shirt", "version", "health", "css", "gs"]
+
+ShortDomain: https://space.bilibili.com
