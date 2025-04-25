@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"os"
+	"time"
 
 	"helloworld/internal/conf"
 
@@ -13,8 +14,11 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	kratoszap "github.com/go-kratos/kratos/contrib/log/zap/v2"
 
 	_ "go.uber.org/automaxprocs"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
@@ -49,7 +53,21 @@ func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 
 func main() {
 	flag.Parse()
-	logger := log.With(log.NewStdLogger(os.Stdout),
+
+	f, err := os.OpenFile("test.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		return
+	}
+	// zap 日志库
+	writeSyncer := zapcore.AddSync(f)
+
+	encoder := zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
+	core := zapcore.NewCore(encoder, writeSyncer, zapcore.DebugLevel)
+	z := zap.New(core)
+	// logger := log.With(log.NewStdLogger(os.Stdout),
+	// 输出到日志文件中
+	// logger := log.With(log.NewStdLogger(f),
+	logger := log.With(kratoszap.NewLogger(z),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.id", id,
@@ -58,6 +76,17 @@ func main() {
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
+	// Helper
+	h := log.NewHelper(
+		log.NewFilter(
+			logger,
+			// 日志过滤，按key过滤
+			log.FilterKey("password"),
+		),
+	)
+	h.Infof("strat time%v", time.Now())
+	h.Infow("password", "123456")
+
 	c := config.New(
 		config.WithSource(
 			file.NewSource(flagconf),

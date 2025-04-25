@@ -6,17 +6,21 @@ import (
 
 	pb "helloworld/api/bubble/v1"
 	"helloworld/internal/biz"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type TodoService struct {
 	pb.UnimplementedTodoServer
 
 	uc *biz.TodoUsecase
+	log *log.Helper
 }
 
-func NewTodoService(uc *biz.TodoUsecase) *TodoService {
+func NewTodoService(uc *biz.TodoUsecase, logger log.Logger) *TodoService {
 	return &TodoService{
 		uc: uc,
+		log: log.NewHelper(logger),
 	}
 }
 
@@ -29,6 +33,7 @@ func (s *TodoService) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest)
 	// 调用业务逻辑
 	td, err := s.uc.CreateTodo(ctx, &biz.Todo{Title: req.Title})
 	if err != nil {
+		s.log.WithContext(ctx).Errorw("uc.CreateTodo failed", err.Error())
 		return &pb.CreateTodoReply{}, err
 	}
 	// 返回
