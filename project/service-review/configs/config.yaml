@@ -1,0 +1,18 @@
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 1s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 1s
+data:
+  database:
+    driver: mysql
+    source: root:youngking98@tcp(127.0.0.1:3307)/commit?parseTime=True&loc=Local&charset=utf8mb4
+  redis:
+    addr: 127.0.0.1:6379
+    read_timeout: 0.2s
+    write_timeout: 0.2s
+snowflake:
+  mechineID: 1
+  startTime: "2025-04-20"
