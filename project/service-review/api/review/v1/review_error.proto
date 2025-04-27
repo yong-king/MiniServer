@@ -17,4 +17,5 @@ enum ErrorReason {
     DB_FAILED = 1 [(errors.code) = 500];
   
     ORDER_REVIEWED = 100 [(errors.code) = 400];
+    APPEAL_REVIEW = 101 [(errors.code) = 402];
 }

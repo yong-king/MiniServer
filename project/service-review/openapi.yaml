@@ -3,32 +3,33 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: Review API
     version: 0.0.1
 paths:
-    /helloworld/{name}:
-        get:
+    /v1/appeal/audit:
+        post:
             tags:
-                - Greeter
-            description: Sends a greeting
-            operationId: Greeter_SayHello
-            parameters:
-                - name: name
-                  in: path
-                  required: true
-                  schema:
-                    type: string
+                - Review
+            description: o 端评价申诉审核
+            operationId: Review_AuditAppeal
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.review.v1.AuditAppealRequest'
+                required: true
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
+                                $ref: '#/components/schemas/api.review.v1.AuditAppealReply'
     /v1/review:
         post:
             tags:
                 - Review
+            description: c端创建评价
             operationId: Review_CreateReview
             requestBody:
                 content:
@@ -43,8 +44,172 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.review.v1.CreateReviewReply'
+    /v1/review/appeal:
+        post:
+            tags:
+                - Review
+            description: b端申述评价
+            operationId: Review_AppealReview
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.review.v1.AppealReviewRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.review.v1.AppealReviewReply'
+    /v1/review/reply:
+        post:
+            tags:
+                - Review
+            description: b端回复评价
+            operationId: Review_ReplyReview
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.review.v1.ReplyReviewRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.review.v1.ReplyReviewReply'
+    /v1/review/{reviewID}:
+        get:
+            tags:
+                - Review
+            description: c端获取评价详情
+            operationId: Review_GetReview
+            parameters:
+                - name: reviewID
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.review.v1.GetReviewReply'
+    /v1/{userID}/reviews:
+        get:
+            tags:
+                - Review
+            description: C端查看userID下所有评价
+            operationId: Review_ListReviewByUserId
+            parameters:
+                - name: userID
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.review.v1.ListReviewByUserIdReply'
+    v1/review/audit:
+        post:
+            tags:
+                - Review
+            description: o端审核评价
+            operationId: Review_AuditRrview
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.review.v1.AuditRrviewRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.review.v1.AuditRrviewReply'
 components:
     schemas:
+        api.review.v1.AppealReviewReply:
+            type: object
+            properties:
+                appleID:
+                    type: string
+        api.review.v1.AppealReviewRequest:
+            type: object
+            properties:
+                reviewID:
+                    type: string
+                storeID:
+                    type: string
+                reason:
+                    type: string
+                content:
+                    type: string
+                picinfo:
+                    type: string
+                videoInfo:
+                    type: string
+        api.review.v1.AuditAppealReply:
+            type: object
+            properties: {}
+        api.review.v1.AuditAppealRequest:
+            type: object
+            properties:
+                appealID:
+                    type: string
+                reviewID:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                opUser:
+                    type: string
+                opRemarks:
+                    type: string
+        api.review.v1.AuditRrviewReply:
+            type: object
+            properties:
+                reviewID:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+        api.review.v1.AuditRrviewRequest:
+            type: object
+            properties:
+                reviewID:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                opUser:
+                    type: string
+                opReason:
+                    type: string
+                opMarks:
+                    type: string
         api.review.v1.CreateReviewReply:
             type: object
             properties:
@@ -74,13 +239,62 @@ components:
                     type: string
                 annoymous:
                     type: boolean
-        helloworld.v1.HelloReply:
+        api.review.v1.GetReviewReply:
             type: object
             properties:
-                message:
+                data:
+                    $ref: '#/components/schemas/api.review.v1.ReviewInfo'
+        api.review.v1.ListReviewByUserIdReply:
+            type: object
+            properties:
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.review.v1.ReviewInfo'
+        api.review.v1.ReplyReviewReply:
+            type: object
+            properties:
+                replyID:
                     type: string
-            description: The response message containing the greetings
+        api.review.v1.ReplyReviewRequest:
+            type: object
+            properties:
+                reviewID:
+                    type: string
+                storeID:
+                    type: string
+                content:
+                    type: string
+                picinfo:
+                    type: string
+                videoInfo:
+                    type: string
+        api.review.v1.ReviewInfo:
+            type: object
+            properties:
+                reviewID:
+                    type: string
+                userID:
+                    type: string
+                orderID:
+                    type: string
+                score:
+                    type: integer
+                    format: int32
+                serviceScore:
+                    type: integer
+                    format: int32
+                expressScore:
+                    type: integer
+                    format: int32
+                content:
+                    type: string
+                picInfo:
+                    type: string
+                videoInfo:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
 tags:
-    - name: Greeter
-      description: The greeting service definition.
     - name: Review
