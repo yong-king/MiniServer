@@ -31,6 +31,7 @@ func (s *ReviewService) CreateReview(ctx context.Context, req *pb.CreateReviewRe
 	review, err := s.uc.CreateReview(ctx, &model.ReviewInfo{
 		UserID: req.UserId,
 		OrderID: req.OrderId,
+		StoreID: req.StoreID,
 		Score: req.Score,
 		ServiceScore: req.ServiceScore,
 		ExpressScore: req.ExpreeScore,
@@ -117,8 +118,10 @@ func (s *ReviewService) ReplyReview(ctx context.Context, req *pb.ReplyReviewRequ
 		VideoInfo: req.VideoInfo,
 	})
 	if err != nil{
+		fmt.Printf("[serivce ReplyReview err:%#v]\n", err)
 		return nil, err
 	}
+	fmt.Printf("[serivce ReplyReview reply:%#v]\n", reply)
 	return &pb.ReplyReviewReply{ReplyID: reply.ReplyID}, nil
 }
 

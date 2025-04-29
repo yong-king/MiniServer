@@ -45,3 +45,12 @@ message Snowflake{
   int64 mechineID = 1;
   string startTime = 2;
 }
+
+
+message Registry{
+  message Consul{
+    string address = 1;
+    string scheme = 2;
+  }
+  Consul consul = 1;
+}

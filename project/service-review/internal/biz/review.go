@@ -104,13 +104,13 @@ func (uc *ReviewUsecase) AppealReview(ctx context.Context, param *AppealParam) (
 		PicInfo: param.Picinfo,
 		VideoInfo: param.VideoInfo,
 	}
-	if appeal != nil {
-		err := uc.repo.UpdateAppeal(ctx, param)
-		if err != nil{
-			return -1, err
-		}
-		return param.AppealID, nil
-	}
+	// if appeal != nil {
+	// 	err := uc.repo.UpdateAppeal(ctx, param)
+	// 	if err != nil{
+	// 		return -1, err
+	// 	}
+	// 	return param.AppealID, nil
+	// }
 	// 1.2.3 如果没有申诉过，就创建参数
 	err = uc.repo.CreateAppealReview(ctx, apeal)
 	if err != nil {
@@ -133,6 +133,7 @@ func (uc *ReviewUsecase) CreateReply(ctx context.Context, param *ReplyParam) (*m
 		PicInfo:   param.Picinfo,
 		VideoInfo: param.VideoInfo,
 	}
+	uc.log.Debugf("------->[biz CreateReply] reply:%v\n", reply)
 	return uc.repo.SaveReply(ctx, reply)
 }
 

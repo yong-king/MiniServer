@@ -222,6 +222,8 @@ components:
                     type: string
                 orderId:
                     type: string
+                storeID:
+                    type: string
                 score:
                     type: integer
                     format: int32

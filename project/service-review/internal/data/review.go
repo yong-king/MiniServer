@@ -86,6 +86,7 @@ func (r *reviewRepo) UpdateAppeal(ctx context.Context, param *biz.AppealParam) e
 }
 
 // CreateAppealReview 创建申诉
+// 这个方法，有就更新，没有就创建
 func (r *reviewRepo) CreateAppealReview(ctx context.Context, appeal *model.ReviewAppealInfo) error {
 	return r.data.query.ReviewAppealInfo.
 		WithContext(ctx).
@@ -116,10 +117,10 @@ func (r *reviewRepo) SaveReply(ctx context.Context, reply *model.ReviewReplyInfo
 	if review.HasReply == 1 {
 		return nil, errors.New("该评价已被回复")
 	}
-	if review.StoreID == reply.StoreID {
+	if review.StoreID != reply.StoreID {
 		return nil, errors.New("水平越权")
 	}
-
+	r.log.Debugf("--------->更新数据!")
 	// 2. 更新数据库中的数据（评价回复表和评价表要同时更新，涉及到事务操作）
 	r.data.query.Transaction(func(tx *query.Query) error {
 		// 回复一条插入数据
@@ -128,7 +129,7 @@ func (r *reviewRepo) SaveReply(ctx context.Context, reply *model.ReviewReplyInfo
 			return err
 		}
 		// 评价表更新hasReply字段\
-		if _, err := tx.ReviewInfo.WithContext(ctx).Where(tx.ReviewInfo.ReviewID.Eq(reply.ReplyID)).Update(tx.ReviewInfo.HasReply, 1); err != nil {
+		if _, err := tx.ReviewInfo.WithContext(ctx).Where(tx.ReviewInfo.ReviewID.Eq(review.ReviewID)).Update(tx.ReviewInfo.HasReply, 1); err != nil {
 			r.log.WithContext(ctx).Errorf("SaveReply update reply fail, err:%v", err)
 			return err
 		}

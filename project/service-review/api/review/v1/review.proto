@@ -67,13 +67,14 @@ service Review {
 message CreateReviewRequest {
 	int64 userId = 1 [(validate.rules).int64 = {gt: 0}];
 	int64 orderId = 2 [(validate.rules).int64 = {gt: 0}];
-	int32 score = 3 [(validate.rules).int32 = {in: [1,2,3,4,5]}];
-	int32 serviceScore = 4 [(validate.rules).int32 = {in: [1,2,3,4,5]}];
-	int32 expreeScore = 5 [(validate.rules).int32 = {in: [1,2,3,4,5]}];
-	string  content = 6 [(validate.rules).string = {min_len: 8, max_len: 255}];
-	string picinfo = 7;
-	string videoInfo = 8;
-	bool annoymous = 9;
+	int64 storeID = 3 [(validate.rules).int64 = {gt: 0}];
+	int32 score = 4 [(validate.rules).int32 = {in: [1,2,3,4,5]}];
+	int32 serviceScore = 5 [(validate.rules).int32 = {in: [1,2,3,4,5]}];
+	int32 expreeScore = 6 [(validate.rules).int32 = {in: [1,2,3,4,5]}];
+	string  content = 7 [(validate.rules).string = {min_len: 8, max_len: 255}];
+	string picinfo = 8;
+	string videoInfo = 9;
+	bool annoymous = 10;
 }
 message CreateReviewReply {
 	int64 reviewId = 1;
