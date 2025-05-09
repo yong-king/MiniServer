@@ -16,3 +16,6 @@ data:
 snowflake:
   mechineID: 1
   startTime: "2025-04-20"
+elasticsearch:
+  addresses:
+    - "http://127.0.0.1:9200"

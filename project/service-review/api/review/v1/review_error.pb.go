@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v5.29.3
-// source: api/review/v1/review_error.proto
+// source: review/v1/review_error.proto
 
 package v1
 
@@ -59,11 +59,11 @@ func (x ErrorReason) String() string {
 }
 
 func (ErrorReason) Descriptor() protoreflect.EnumDescriptor {
-	return file_api_review_v1_review_error_proto_enumTypes[0].Descriptor()
+	return file_review_v1_review_error_proto_enumTypes[0].Descriptor()
 }
 
 func (ErrorReason) Type() protoreflect.EnumType {
-	return &file_api_review_v1_review_error_proto_enumTypes[0]
+	return &file_review_v1_review_error_proto_enumTypes[0]
 }
 
 func (x ErrorReason) Number() protoreflect.EnumNumber {
@@ -72,14 +72,14 @@ func (x ErrorReason) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ErrorReason.Descriptor instead.
 func (ErrorReason) EnumDescriptor() ([]byte, []int) {
-	return file_api_review_v1_review_error_proto_rawDescGZIP(), []int{0}
+	return file_review_v1_review_error_proto_rawDescGZIP(), []int{0}
 }
 
-var File_api_review_v1_review_error_proto protoreflect.FileDescriptor
+var File_review_v1_review_error_proto protoreflect.FileDescriptor
 
-const file_api_review_v1_review_error_proto_rawDesc = "" +
+const file_review_v1_review_error_proto_rawDesc = "" +
 	"\n" +
-	" api/review/v1/review_error.proto\x12\rapi.review.v1\x1a\x13errors/errors.proto*q\n" +
+	"\x1creview/v1/review_error.proto\x12\rapi.review.v1\x1a\x13errors/errors.proto*q\n" +
 	"\vErrorReason\x12\x14\n" +
 	"\n" +
 	"NEED_LOGIN\x10\x00\x1a\x04\xa8E\x91\x03\x12\x13\n" +
@@ -89,22 +89,22 @@ const file_api_review_v1_review_error_proto_rawDesc = "" +
 	"\rapi.review.v1P\x01Z\x1fservice-review/api/review/v1;v1b\x06proto3"
 
 var (
-	file_api_review_v1_review_error_proto_rawDescOnce sync.Once
-	file_api_review_v1_review_error_proto_rawDescData []byte
+	file_review_v1_review_error_proto_rawDescOnce sync.Once
+	file_review_v1_review_error_proto_rawDescData []byte
 )
 
-func file_api_review_v1_review_error_proto_rawDescGZIP() []byte {
-	file_api_review_v1_review_error_proto_rawDescOnce.Do(func() {
-		file_api_review_v1_review_error_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_review_v1_review_error_proto_rawDesc), len(file_api_review_v1_review_error_proto_rawDesc)))
+func file_review_v1_review_error_proto_rawDescGZIP() []byte {
+	file_review_v1_review_error_proto_rawDescOnce.Do(func() {
+		file_review_v1_review_error_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_review_v1_review_error_proto_rawDesc), len(file_review_v1_review_error_proto_rawDesc)))
 	})
-	return file_api_review_v1_review_error_proto_rawDescData
+	return file_review_v1_review_error_proto_rawDescData
 }
 
-var file_api_review_v1_review_error_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_api_review_v1_review_error_proto_goTypes = []any{
+var file_review_v1_review_error_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_review_v1_review_error_proto_goTypes = []any{
 	(ErrorReason)(0), // 0: api.review.v1.ErrorReason
 }
-var file_api_review_v1_review_error_proto_depIdxs = []int32{
+var file_review_v1_review_error_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -112,26 +112,26 @@ var file_api_review_v1_review_error_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_api_review_v1_review_error_proto_init() }
-func file_api_review_v1_review_error_proto_init() {
-	if File_api_review_v1_review_error_proto != nil {
+func init() { file_review_v1_review_error_proto_init() }
+func file_review_v1_review_error_proto_init() {
+	if File_review_v1_review_error_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_review_v1_review_error_proto_rawDesc), len(file_api_review_v1_review_error_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_review_v1_review_error_proto_rawDesc), len(file_review_v1_review_error_proto_rawDesc)),
 			NumEnums:      1,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_api_review_v1_review_error_proto_goTypes,
-		DependencyIndexes: file_api_review_v1_review_error_proto_depIdxs,
-		EnumInfos:         file_api_review_v1_review_error_proto_enumTypes,
+		GoTypes:           file_review_v1_review_error_proto_goTypes,
+		DependencyIndexes: file_review_v1_review_error_proto_depIdxs,
+		EnumInfos:         file_review_v1_review_error_proto_enumTypes,
 	}.Build()
-	File_api_review_v1_review_error_proto = out.File
-	file_api_review_v1_review_error_proto_goTypes = nil
-	file_api_review_v1_review_error_proto_depIdxs = nil
+	File_review_v1_review_error_proto = out.File
+	file_review_v1_review_error_proto_goTypes = nil
+	file_review_v1_review_error_proto_depIdxs = nil
 }

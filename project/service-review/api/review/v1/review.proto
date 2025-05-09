@@ -62,6 +62,19 @@ service Review {
 		};
 	}
 
+	// 根据商家id查询评价列表（分页）
+	rpc ListReviewByStoreID(ListReviewByStoreIDRequest) returns (ListReviewByStoreIDResponse){}
+
+}
+
+message ListReviewByStoreIDRequest {
+	int64 storeID = 1 [(validate.rules).int64 = {gt: 0}];
+	int32 page = 2 [(validate.rules).int32 = {gt: 0}];
+	int32 size = 3 [(validate.rules).int32 = {gt: 0}];
+}
+
+message ListReviewByStoreIDResponse{
+	repeated ReviewInfo list = 1;
 }
 
 message CreateReviewRequest {

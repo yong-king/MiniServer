@@ -2,12 +2,20 @@ package data
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"service-review/internal/biz"
 	"service-review/internal/data/model"
 	"service-review/internal/data/query"
+	"strconv"
+	"strings"
+	"time"
 
+	"golang.org/x/sync/singleflight"
+	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -163,4 +171,154 @@ func (r *reviewRepo) AuditAppeal(ctx context.Context, param *biz.AuditAppealPara
 		return nil
 	})
 	return err
+}
+
+func (r *reviewRepo) ListReviewByStoreID(ctx context.Context, storeID int64, offset int32, limit int32) ([]*biz.MyReviewinfo, error){
+	// 去es里查询评价
+	resq, err := r.data.es.Search().
+		Index("review").
+		From(int(offset)).
+		Size(int(limit)).
+		Query(&types.Query{
+			Bool: &types.BoolQuery{
+				Filter: []types.Query{
+					{
+						Term: map[string]types.TermQuery{
+							"store_id": {Value: storeID},
+						},
+					},
+				},
+			},
+		}).
+		Do(ctx)
+	if err != nil{
+		return nil, err
+	}
+	// 返序列华
+	list := make([]*biz.MyReviewinfo, 0, resq.Hits.Total.Value)
+
+	for _, hit := range resq.Hits.Hits{
+		tmp := &biz.MyReviewinfo{}
+		if err := json.Unmarshal(hit.Source_, tmp); err != nil{
+			r.log.Errorf("json.Unmarshal(hit.Source_, tmp) failed, err:%v", err)
+			continue
+		}
+		list = append(list, tmp)
+	}
+	return list, nil
+}
+
+var g singleflight.Group
+
+func (r *reviewRepo) getData2(ctx context.Context, storeID int64, offset int32, limit int32) ([]*biz.MyReviewinfo, error){
+	// 1. 先查询Redis缓存
+	// 2. 缓存没有则查询ES
+	// 3. 通过singleflight 合并短时间内大量的并发查询
+	key := fmt.Sprintf("review:%d:%d:%d", storeID, offset, limit)
+	b, err := r.getDataBySingleflight(ctx, key)
+	if err != nil {
+		return nil, err
+	}
+
+	hm := new(types.HitsMetadata)
+	if err := json.Unmarshal(b, hm); err != nil{
+		return nil, err
+	}
+
+	// 反序列化
+	// 反序列化数据
+	// resp.Hits.Hits[0].Source_(json.RawMessage)  ==>  model.ReviewInfo
+	list := make([]*biz.MyReviewinfo, 0, hm.Total.Value)
+
+	for _, hit := range hm.Hits{
+		tmp := &biz.MyReviewinfo{}
+		if err := json.Unmarshal(hit.Source_, tmp); err != nil{
+			r.log.Errorf("json.Unmarshal(hit.Source_, tmp) failed, err:%v", err)
+			continue
+		}
+		list = append(list, tmp)
+	}
+	return list, nil
+
+}
+
+// getDataBySingleflight 合并短时间内大量的并发查询
+func (r *reviewRepo) getDataBySingleflight(ctx context.Context, key string)([]byte, error){
+	v, err, shared := g.Do(key, func() (interface{}, error){
+		// 查缓存
+		data, err := r.getDataFromCache(ctx, key)
+		if err == nil{
+			return data, nil
+		}
+
+		// 缓存中没有, 只有在缓存中没有这个key的错误时才查ES
+		if errors.Is(err, redis.Nil){
+			// 查ES
+			data, err := r.getDataFromEs(ctx, key)
+			if err == nil{
+				// 设置缓存
+				return data, r.setCache(ctx, key, data)
+			}
+			return nil, err
+		}
+
+		// 查缓存失败
+		return nil, err
+	})
+	r.log.Debugf("getDataBySingleflight ret: v:%v, err: %v shared:%v\n", v, err, shared)
+	if err != nil {
+		return nil, err
+	}
+	return v.([]byte), nil
+}
+
+// getDataFromCache 读取缓存数据
+func  (r *reviewRepo) getDataFromCache(ctx context.Context, key string) ([]byte, error){
+	r.log.Debugf("getDataFromCache key:%v\n", key)
+	return r.data.rdb.Get(ctx, key).Bytes()
+}
+
+// getDataFromEs 从es读取数据
+func (r *reviewRepo) getDataFromEs(ctx context.Context, key string) ([]byte, error){
+	values := strings.Split(key, ":")
+	if len(values) < 4 {
+		return nil, errors.New("invalid key")
+	}
+	index, storeID, offsetStr, limitStr := values[0], values[1],  values[2],  values[3]
+
+	offset, err := strconv.Atoi(offsetStr)
+	if err != nil {
+		return nil, err
+	}
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		return nil, err
+	}
+
+	resq, err := r.data.es.Search().
+		Index(index).
+		From(offset).
+		Size(limit).
+		Query(&types.Query{
+			Bool: &types.BoolQuery{
+				Filter: []types.Query{
+					{
+						Term: map[string]types.TermQuery{
+							"store_id": {Value: storeID},
+						},
+					},
+				},
+			},
+		}).
+		Do(ctx)
+	if err != nil{
+		return nil, err
+	}
+
+	return json.Marshal(resq.Hits)
+}
+
+// setCache 设置缓存
+func (r *reviewRepo) setCache(ctx context.Context, key string,  data []byte) error {
+	return r.data.rdb.Set(ctx, key, data, time.Second*10).Err()
 }
